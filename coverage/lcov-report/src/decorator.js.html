@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/decorator.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">src/</a> decorator.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>22/33</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">33.33% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>22/33</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">"use strict";
+const symbol_1 = require('./symbol');
+const Debugger = require('debug');
+require('reflect-metadata');
+const debug = Debugger('decorator');
+function RemoteService(name) {
+    return (target) =&gt; {
+        debug(`@RemoteService('${name}')`);
+        target.prototype[symbol_1.NAME] = name;
+    };
+}
+exports.RemoteService = RemoteService;
+function RemoteMethod(name) {
+    return (target, key) =&gt; {
+        const type = Reflect.getMetadata('design:returntype', target, key);
+        const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
+        debug(`@RemoteMethod('${name}') on '${key}'`);
+        target[symbol_1.METHOD] = target[symbol_1.METHOD] || {};
+        target[symbol_1.METHOD][key] = target[symbol_1.METHOD][key] || {
+            name,
+            params: [],
+            response: null,
+        };
+        target[symbol_1.METHOD][key].name = name;
+        //target[METHOD][key].params = paramTypes;
+    };
+}
+exports.RemoteMethod = RemoteMethod;
+<span class="fstat-no" title="function not covered" >function RemoteParam(name) {</span>
+<span class="cstat-no" title="statement not covered" >    return (target, key, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        const type = Reflect.getMetadata('design:paramtypes', target, key)[index];</span>
+<span class="cstat-no" title="statement not covered" >        debug(`@RemoteParam('${name}') on '${key}[${index}]:${type}'`);</span>
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD] = target[symbol_1.METHOD] || {};</span>
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD][key] = target[symbol_1.METHOD][key] || {</span>
+            name: '',
+            params: [],
+            response: null,
+        };
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD][key].paramBindings[index] = {</span>
+            name,
+            type,
+        };
+    };
+}
+exports.RemoteParam = RemoteParam;
+<span class="fstat-no" title="function not covered" >function RemoteResponse(schema) {</span>
+<span class="cstat-no" title="statement not covered" >    return (target, key) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        debug(`@RemoteResponse(${schema}) on '${key}'`);</span>
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD] = target[symbol_1.METHOD] || {};</span>
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD][key] = target[symbol_1.METHOD][key] || {</span>
+            name: '',
+            params: [],
+            response: null,
+        };
+<span class="cstat-no" title="statement not covered" >        target[symbol_1.METHOD][key].response = schema;</span>
+    };
+}
+exports.RemoteResponse = RemoteResponse;
+//# sourceMappingURL=decorator.js.map</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Sep 01 2016 17:03:13 GMT+0800 (CST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

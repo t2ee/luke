@@ -2,10 +2,10 @@ import * as Debugger from 'debug';
 import {
     NAME,
     METHOD,
-} from 'symbol';
-import Transport from 'net/Transport';
-import Encode from 'net/Encode';
-import NetUtil from 'net/Util';
+} from '../symbol';
+import Transport from '../net/Transport';
+import Encode from '../net/Encode';
+import NetUtil from '../net/Util';
 import * as Kalm from 'kalm-j';
 import * as Q from 'q';
 
@@ -30,10 +30,10 @@ export default class RemoteClient {
         });
     }
 
-    register<T>(service: new () => T): T {
+    getClient<T>(service: new () => T): T {
         const prototype = service.prototype;
         const name = prototype[NAME];
-        debug(`Registering ${name}`);
+        debug(`Retrieving ${name}`);
 
         const self = this;
 

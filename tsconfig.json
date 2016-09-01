@@ -7,11 +7,7 @@
     	"emitDecoratorMetadata": true,
       "sourceMap": true,
       "moduleResolution": "node",
-      "declaration": true,
-      "baseUrl": "./src",
-      "paths": {
-          "*": [ "./*" ]
-      }
+      "declaration": true
 	},
 	"compileOnSave": false,
     "include": [

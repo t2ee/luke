@@ -1,11 +1,10 @@
-require('source-map-support/register');
-require('app-module-path/register');
+import 'source-map-support/register';
 import {
     RemoteService,
     RemoteMethod,
-} from 'decorator';
-import RemoteServer from 'server';
-import RemoteClient from 'client';
+} from './decorator';
+import RemoteServer from './server';
+import RemoteClient from './client';
 
 export {
     RemoteServer,

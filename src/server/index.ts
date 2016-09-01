@@ -2,10 +2,10 @@ import * as Debugger from 'debug';
 import {
     NAME,
     METHOD,
-} from 'symbol';
-import Transport from 'net/Transport';
-import Encode from 'net/Encode';
-import NetUtil from 'net/Util';
+} from '../symbol';
+import Transport from '../net/Transport';
+import Encode from '../net/Encode';
+import NetUtil from '../net/Util';
 import * as Kalm from 'kalm-j';
 
 const debug = Debugger('server');

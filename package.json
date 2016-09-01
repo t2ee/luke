@@ -1,17 +1,24 @@
 {
   "name": "@t2ee/luke",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/index.js",
-  "typings": "dist/inexx.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "test-typescript": "rm -rf test-dist && tsc -p tsconfig.test.json",
+    "test": "npm run test-typescript && npm run mocha",
+    "mocha": "mocha test-dist/test/*.js --require source-map-support/register",
+    "coverage": "npm run test-typescript && npm run istanbul",
+    "istanbul": "istanbul cover _mocha test-dist/test/*.js",
+    "typescript": "tsc -p tsconfig.json"
   },
   "author": "Qiaosen Huang",
   "license": "MIT",
   "dependencies": {
+    "@types/chai": "^3.4.32",
     "@types/debug": "0.0.28",
+    "@types/mocha": "^2.2.31",
     "@types/node": "^6.0.37",
     "@types/q": "0.0.29",
     "app-module-path": "^1.1.0",
@@ -20,5 +27,10 @@
     "q": "^1.4.1",
     "reflect-metadata": "^0.1.8",
     "source-map-support": "^0.4.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2"
   }
 }

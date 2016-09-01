@@ -4,7 +4,7 @@ export default class RemoteClient {
     private client;
     private queue;
     connect(hostname: string, port: number): void;
-    register<T>(service: new () => T): T;
+    getClient<T>(service: new () => T): T;
     private handleResponse(payload);
     private handleError(payload);
 }
