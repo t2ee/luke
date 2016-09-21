@@ -22,6 +22,7 @@ class RemoteClient {
             channels: {
                 onResponse: this.handleResponse.bind(this),
                 onError: this.handleError.bind(this),
+                onBroadcast: this.handleBroadcast.bind(this),
             }
         });
     }
@@ -37,7 +38,7 @@ class RemoteClient {
                 const callId = Date.now() + '-' + Math.random().toString().substr(2);
                 const payload = {
                     service: name,
-                    method: method.name,
+                    method: key,
                     params,
                     callId,
                 };
@@ -49,11 +50,20 @@ class RemoteClient {
         }
         return result;
     }
+    setBroadcastHandler(handler) {
+        this.broadcastHandler = handler;
+    }
     handleResponse(payload) {
         debug('Received', payload);
         const { callId, response, } = payload;
         if (this.queue[callId]) {
             this.queue[callId].resolve(response);
+        }
+    }
+    handleBroadcast(payload) {
+        debug('Broadcast', payload);
+        if (this.broadcastHandler) {
+            this.broadcastHandler(payload);
         }
     }
     handleError(payload) {

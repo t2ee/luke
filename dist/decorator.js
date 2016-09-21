@@ -10,18 +10,16 @@ function RemoteService(name) {
     };
 }
 exports.RemoteService = RemoteService;
-function RemoteMethod(name) {
+function RemoteMethod() {
     return (target, key) => {
         const type = Reflect.getMetadata('design:returntype', target, key);
         const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
-        debug(`@RemoteMethod('${name}') on '${key}'`);
+        debug(`@RemoteMethod() on '${key}'`);
         target[symbol_1.METHOD] = target[symbol_1.METHOD] || {};
         target[symbol_1.METHOD][key] = target[symbol_1.METHOD][key] || {
-            name,
             params: [],
             response: null,
         };
-        target[symbol_1.METHOD][key].name = name;
         //target[METHOD][key].params = paramTypes;
     };
 }

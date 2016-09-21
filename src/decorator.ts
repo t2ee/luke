@@ -15,18 +15,16 @@ export function RemoteService(name: string): ClassDecorator {
     }
 }
 
-export function RemoteMethod(name: string): MethodDecorator {
+export function RemoteMethod(): MethodDecorator {
     return (target, key: string) => {
         const type = Reflect.getMetadata('design:returntype', target, key);
         const paramTypes = Reflect.getMetadata('design:paramtypes', target, key);
-        debug(`@RemoteMethod('${name}') on '${key}'`);
+        debug(`@RemoteMethod() on '${key}'`);
         target[METHOD] = target[METHOD] || {};
         target[METHOD][key] = target[METHOD][key] || {
-            name,
             params: [],
             response: null,
         };
-        target[METHOD][key].name = name;
         //target[METHOD][key].params = paramTypes;
     }
 }

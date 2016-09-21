@@ -29,29 +29,39 @@ let ITestService = class ITestService {
     error() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
+    broadcast(msg) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
 };
 __decorate([
-    src_1.RemoteMethod('echo'), 
+    src_1.RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [String]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "echo", null);
 __decorate([
-    src_1.RemoteMethod('add'), 
+    src_1.RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [Number, Number]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "add", null);
 __decorate([
-    src_1.RemoteMethod('error'), 
+    src_1.RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', []), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "error", null);
+__decorate([
+    src_1.RemoteMethod(), 
+    __metadata('design:type', Function), 
+    __metadata('design:paramtypes', [String]), 
+    __metadata('design:returntype', Promise)
+], ITestService.prototype, "broadcast", null);
 ITestService = __decorate([
     src_1.RemoteService('Test'), 
     __metadata('design:paramtypes', [])
 ], ITestService);
+let server;
 class TestService extends ITestService {
     echo(message) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -64,13 +74,17 @@ class TestService extends ITestService {
             return a + b;
         });
     }
+    broadcast(msg) {
+        return __awaiter(this, void 0, void 0, function* () {
+            server.broadcast('hello');
+        });
+    }
     error() {
         return __awaiter(this, void 0, void 0, function* () {
             throw 'Error';
         });
     }
 }
-let server;
 let client;
 let testClient;
 describe('test', () => {
@@ -107,6 +121,13 @@ describe('test', () => {
             chai.assert.equal(e, 'Error');
             done();
         });
+    });
+    it('should broadcast', done => {
+        client.setBroadcastHandler(payload => {
+            chai.assert.equal(payload, 'hello');
+            done();
+        });
+        testClient.broadcast('hello');
     });
 });
 //# sourceMappingURL=tcp.js.map

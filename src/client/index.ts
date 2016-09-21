@@ -16,6 +16,7 @@ export default class RemoteClient {
     private encode: Encode = Encode.JSON;
     private client: Kalm.Client;
     private queue: { [key: string]: Q.Deferred<any> } = {};
+    private broadcastHandler: (payload) => any;
 
     connect(hostname: string, port: number) {
         this.client = new Kalm.Client({
@@ -26,6 +27,7 @@ export default class RemoteClient {
             channels: {
                 onResponse: this.handleResponse.bind(this),
                 onError: this.handleError.bind(this),
+                onBroadcast: this.handleBroadcast.bind(this),
             }
         });
     }
@@ -44,7 +46,7 @@ export default class RemoteClient {
                 const callId = Date.now() + '-' + Math.random().toString().substr(2);
                 const payload = {
                     service: name,
-                    method: method.name,
+                    method: key,
                     params,
                     callId,
                 };
@@ -57,6 +59,10 @@ export default class RemoteClient {
         return result;
     }
 
+    public setBroadcastHandler(handler: (payload) => any) {
+        this.broadcastHandler = handler;
+    }
+
     private handleResponse(payload) {
         debug('Received', payload);
         const {
@@ -65,6 +71,13 @@ export default class RemoteClient {
         } = payload;
         if (this.queue[callId]) {
             this.queue[callId].resolve(response);
+        }
+    }
+
+    private handleBroadcast(payload) {
+        debug('Broadcast', payload);
+        if (this.broadcastHandler) {
+            this.broadcastHandler(payload);
         }
     }
 

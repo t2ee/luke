@@ -23,6 +23,9 @@ class RemoteServer {
             instance: new service(),
         };
     }
+    broadcast(payload) {
+        this.server.broadcast('onBroadcast', payload);
+    }
     start() {
         this.server = new Kalm.Server({
             port: this.port,

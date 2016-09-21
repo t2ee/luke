@@ -32,6 +32,10 @@ export default class RemoteServer {
         };
     }
 
+    broadcast(payload) {
+        this.server.broadcast('onBroadcast', payload);
+    }
+
     start(): void {
 
         this.server = new Kalm.Server({

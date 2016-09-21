@@ -10,15 +10,21 @@ const Sleep = ms => new Promise<void>(resolve => setTimeout(resolve, ms));
 
 @RemoteService('Test')
 class ITestService {
-    @RemoteMethod('echo')
+    @RemoteMethod()
     async echo(message: string): Promise<string> { return null;}
 
-    @RemoteMethod('add')
+    @RemoteMethod()
     async add(a: number, b: number): Promise<number> { return null;}
 
-    @RemoteMethod('error')
+    @RemoteMethod()
     async error() {}
+
+    @RemoteMethod()
+    async broadcast(msg: string) {}
 }
+
+
+let server: RemoteServer;
 
 class TestService extends ITestService {
     async echo(message: string) {
@@ -28,12 +34,15 @@ class TestService extends ITestService {
         await Sleep(100);
         return a + b;
     }
+    async broadcast(msg: string) {
+        server.broadcast('hello');
+
+    }
     async error() {
         throw 'Error';
     }
 }
 
-let server: RemoteServer;
 
 let client: RemoteClient;
 let testClient: ITestService;
@@ -72,5 +81,12 @@ describe('test', () => {
                 chai.assert.equal(e, 'Error');
                 done();
             })
+    });
+    it('should broadcast', done => {
+        client.setBroadcastHandler(payload => {
+            chai.assert.equal(payload, 'hello');
+            done();
+        });
+        testClient.broadcast('hello');
     })
 });
