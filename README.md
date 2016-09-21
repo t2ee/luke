@@ -49,6 +49,36 @@ const testClient = client.getClient(ITestService);
 
 
 ```
+##API
+
+###RemoteClient
+
+####getClient<T>(service: new () => T): T
+> Wrap the service with hooks, returns the client that are callable
+
+####connect(hostname: string, port: number)
+> Connect to the remote server
+
+####setBroadcastHandler(handler: () => any)
+> Takes any function, that will be called upon server broadcasts anything
+
+
+
+
+
+###RemoteServer
+
+####RemoteServer(port: number)
+> constructor, takes the port
+
+####register<T>(service: new () => T)
+> Register an interface
+
+####broadcast(message: any)
+> Broadcast a message to all clients.
+
+####start()
+> Start listening.
 
 [npm-image]: https://img.shields.io/npm/v/@t2ee/luke.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@t2ee/luke
