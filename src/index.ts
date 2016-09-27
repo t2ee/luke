@@ -1,14 +1,15 @@
 import 'source-map-support/register';
-import {
-    RemoteService,
-    RemoteMethod,
-} from './decorator';
-import RemoteServer from './server';
-import RemoteClient from './client';
+import Client from './Client';
+import Server from './Server';
+import * as abstract from './abstract';
+import * as decorators from './abstract';
+import * as utils from './utils';
+import * as providers from './providers';
 
 export {
-    RemoteServer,
-    RemoteClient,
-    RemoteService,
-    RemoteMethod,
+    Client,
+    Server,
+    abstract,
+    decorators,
+    utils,
 };
