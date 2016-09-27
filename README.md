@@ -9,11 +9,22 @@
 ##Example
 ```
 import {
-	RemoteService,
-	RemoteMethod
-	RemoteServer,
-	RemoteClient,
+	Server,
+	Client,
+  decorators,
+  providers,
 } from '@t2ee/luke';
+const {
+  RemoteMethod,
+  RemoteService,
+} = decorators;
+const {
+  AMQPProvider,
+} = providers;
+
+//provider for luke.
+const provider = new AMQPProvider('amqp://localhost:5672');
+
 
 // this is the definition shared by both server and client.
 
@@ -31,17 +42,16 @@ class TestService extends ITestService {
     }
 }
 
-let server = new RemoteServer(6001); // listen on port 6001
+const server = new Server(provider); // listen on port 6001
 server.register(ITestService);
 server.start()
 // tada! server is now running.
 
-let client = new RemoveClient();
-client.connect('0.0.0.0', 6001);
+const client = new Client(provider);
 
 const testClient = client.getClient(ITestService);
 
-// now let's here some echoooooooos!
+// now let's hear some echoooooooos!
 (async () => {
 	const message = await testClient.echo('hello world');
 	console.log(message);
@@ -51,34 +61,35 @@ const testClient = client.getClient(ITestService);
 ```
 ##API
 
-###RemoteClient
+###Client
+
+####constructor(provider: Provider)
+> constructor, takes an provider implementation
 
 ####getClient<T>(service: new () => T): T
 > Wrap the service with hooks, returns the client that are callable
 
-####connect(hostname: string, port: number)
-> Connect to the remote server
-
-####setBroadcastHandler(handler: () => any)
-> Takes any function, that will be called upon server broadcasts anything
 
 
+###Server
 
+####constructor(provider: Provider)
+> constructor, takes an provider implementation
 
-
-###RemoteServer
-
-####RemoteServer(port: number)
-> constructor, takes the port
-
-####register<T>(service: new () => T)
+####register<T>(service: new () => T): void
 > Register an interface
 
-####broadcast(message: any)
-> Broadcast a message to all clients.
+####start(): void
+> Start listening
 
-####start()
-> Start listening.
+####stop(): void
+> Stop listening
+
+####isRunning(): boolean
+> If service is running
+
+####setConcurrency(concurrency: number): void
+> Set concurrency of running task runners.
 
 [npm-image]: https://img.shields.io/npm/v/@t2ee/luke.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@t2ee/luke
