@@ -1,14 +1,17 @@
 import {
-    RemoteService,
-    RemoteMethod,
-} from '../src/decorators';
-import {
+    decorators,
     Server,
     Client,
-} from '../src';
-import {
+    providers,
+} from '../dist';
+
+const {
+    RemoteService,
+    RemoteMethod,
+} = decorators;
+const {
     AMQPProvider,
-} from '../src/providers';
+} = providers;
 
 import * as chai from 'chai';
 

@@ -16,9 +16,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const decorators_1 = require('../src/decorators');
-const src_1 = require('../src');
-const providers_1 = require('../src/providers');
+const dist_1 = require('../dist');
+const { RemoteService, RemoteMethod, } = dist_1.decorators;
+const { AMQPProvider, } = dist_1.providers;
 const chai = require('chai');
 const Sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 let ITestService = class ITestService {
@@ -36,31 +36,31 @@ let ITestService = class ITestService {
     }
 };
 __decorate([
-    decorators_1.RemoteMethod(), 
+    RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [String]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "echo", null);
 __decorate([
-    decorators_1.RemoteMethod(), 
+    RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [Number, Number]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "add", null);
 __decorate([
-    decorators_1.RemoteMethod(), 
+    RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', []), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "error", null);
 __decorate([
-    decorators_1.RemoteMethod(), 
+    RemoteMethod(), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [String]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "broadcast", null);
 ITestService = __decorate([
-    decorators_1.RemoteService('Test'), 
+    RemoteService('Test'), 
     __metadata('design:paramtypes', [])
 ], ITestService);
 class TestService extends ITestService {
@@ -84,16 +84,16 @@ class TestService extends ITestService {
 let server;
 let client;
 let testClient;
-const clientAmqp = new providers_1.AMQPProvider(process.env.AMQP, 'test');
-const serverAmqp = new providers_1.AMQPProvider(process.env.AMQP, 'test');
+const clientAmqp = new AMQPProvider(process.env.AMQP, 'test');
+const serverAmqp = new AMQPProvider(process.env.AMQP, 'test');
 describe('test', () => {
     before((done) => {
         (() => __awaiter(this, void 0, void 0, function* () {
-            server = new src_1.Server(serverAmqp);
+            server = new dist_1.Server(serverAmqp);
             server.register(TestService);
             server.start();
             yield Sleep(1000);
-            client = new src_1.Client(clientAmqp);
+            client = new dist_1.Client(clientAmqp);
             testClient = client.getClient(ITestService);
         }))().catch(done).then(done);
     });

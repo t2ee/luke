@@ -1,16 +1,16 @@
 {
   "name": "@t2ee/luke",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test-typescript": "rm -rf test-dist && tsc -p tsconfig.test.json",
-    "test": "npm run test-typescript && npm run mocha",
-    "mocha": "mocha test-dist/test/*.js --require source-map-support/register",
+    "test": "npm run build && npm run test-typescript && npm run mocha",
+    "mocha": "mocha test-dist/*.js --require source-map-support/register",
     "coverage": "npm run test-typescript && npm run istanbul",
-    "istanbul": "istanbul cover _mocha test-dist/test/*.js",
+    "istanbul": "istanbul cover _mocha test-dist/*.js",
     "typescript": "tsc -p tsconfig.json"
   },
   "author": "Qiaosen Huang",
