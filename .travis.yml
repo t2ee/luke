@@ -1,6 +1,10 @@
 language: node_js
+services:
+    - rabbitmq
 node_js:
     - 6
+env:
+    - AMQP="amqp://127.0.0.1:5672"
 sudo: false
 before_script: npm i istanbul mocha typescript@next -g
 script: npm install; npm test
