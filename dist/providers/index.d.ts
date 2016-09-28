@@ -1,2 +1,3 @@
 import AMQPProvider from './AMQPProvider';
-export { AMQPProvider };
+import RedisProvider from './RedisProvider';
+export { AMQPProvider, RedisProvider };

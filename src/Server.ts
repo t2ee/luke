@@ -78,7 +78,6 @@ export default class Server {
                     response.response = encodeUtil.encode(result, method.returnType);
                     response.responseType = 'success';
                 } catch (e) {
-                    console.log(e)
                     response.response = e.message || e;
                     response.callId = callId;
                     response.responseType = 'error';

@@ -12,7 +12,7 @@ const {
     RemoteMethod,
 } = decorators;
 const {
-    AMQPProvider,
+    RedisProvider,
 } = providers;
 
 import * as chai from 'chai';
@@ -75,10 +75,10 @@ let server: Server;
 let client: Client;
 let testClient: ITestService;
 
-const clientAmqp = new AMQPProvider(process.env.AMQP, 'test');
-const serverAmqp = new AMQPProvider(process.env.AMQP, 'test');
+const clientAmqp = new RedisProvider('redis://127.0.0.1:6379', 'test', 10000);
+const serverAmqp = new RedisProvider('redis://127.0.0.1:6379', 'test', 10000);
 
-describe('amqp', () => {
+describe('redis', () => {
     before((done) => {
         (async () => {
             server = new Server(serverAmqp);

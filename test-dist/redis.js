@@ -18,7 +18,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const dist_1 = require('../dist');
 const { RemoteService, RemoteMethod, } = dist_1.decorators;
-const { AMQPProvider, } = dist_1.providers;
+const { RedisProvider, } = dist_1.providers;
 const chai = require('chai');
 const Sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 class Person extends dist_1.Serializable {
@@ -105,9 +105,9 @@ class TestService extends ITestService {
 let server;
 let client;
 let testClient;
-const clientAmqp = new AMQPProvider(process.env.AMQP, 'test');
-const serverAmqp = new AMQPProvider(process.env.AMQP, 'test');
-describe('amqp', () => {
+const clientAmqp = new RedisProvider('redis://127.0.0.1:6379', 'test', 10000);
+const serverAmqp = new RedisProvider('redis://127.0.0.1:6379', 'test', 10000);
+describe('redis', () => {
     before((done) => {
         (() => __awaiter(this, void 0, void 0, function* () {
             server = new dist_1.Server(serverAmqp);
@@ -154,4 +154,4 @@ describe('amqp', () => {
             .catch(done);
     });
 });
-//# sourceMappingURL=amqp.js.map
+//# sourceMappingURL=redis.js.map

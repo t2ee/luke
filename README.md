@@ -58,7 +58,13 @@ const testClient = client.getClient(ITestService);
 })().catch(e => console.log(e));
 
 
+
 ```
+
+##Providers
+###AMQPProvider(uri: string, topic: string)
+###RedisProvider(uri: string, topic: string, retryTimeout: number)
+
 ##API
 
 ###Client
@@ -119,6 +125,14 @@ class Person extends Serializable<Person> {
 
 ####abstract fromJson(data: utils.Json): T
 > return parsed instance
+
+
+
+##Plans
+
+ - [ ] SocketIOProvider
+ - [ ] TcpProvider
+ - [ ] UdpProvider
 
 
 [npm-image]: https://img.shields.io/npm/v/@t2ee/luke.svg?style=flat-square

@@ -31,8 +31,8 @@ export default class RemoteClient {
         this.provider = provider;
         (new ThresholdedRunner(
             0,
-            10,
-            1,
+            50,
+            5,
             1,
             this.fetchResult.bind(this)
         )).start();
@@ -66,8 +66,9 @@ export default class RemoteClient {
         return result;
     }
 
-    private async fetchResult(): Promise<void> {
+    private async fetchResult(): Promise<boolean> {
         const response: Response = await this.provider.getResponse();
+        if (!response) return false;
         const callId = response.callId
         if (this.queue[callId]) {
             const r = this.queue[callId];
@@ -78,6 +79,8 @@ export default class RemoteClient {
             } else if (type === 'error'){
                 r.d.reject(response.response);
             }
+            return true;
         }
+        return false;
     }
 }

@@ -18,7 +18,7 @@ class RemoteClient {
         this.queue = {};
         this.prototypes = {};
         this.provider = provider;
-        (new ThresholdedRunner_1.default(0, 10, 1, 1, this.fetchResult.bind(this))).start();
+        (new ThresholdedRunner_1.default(0, 50, 5, 1, this.fetchResult.bind(this))).start();
     }
     getClient(Service) {
         const prototype = Service.prototype;
@@ -49,6 +49,8 @@ class RemoteClient {
     fetchResult() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.provider.getResponse();
+            if (!response)
+                return false;
             const callId = response.callId;
             if (this.queue[callId]) {
                 const r = this.queue[callId];
@@ -60,7 +62,9 @@ class RemoteClient {
                 else if (type === 'error') {
                     r.d.reject(response.response);
                 }
+                return true;
             }
+            return false;
         });
     }
 }

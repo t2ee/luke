@@ -57,7 +57,6 @@ class Server {
                         response.responseType = 'success';
                     }
                     catch (e) {
-                        console.log(e);
                         response.response = e.message || e;
                         response.callId = callId;
                         response.responseType = 'error';
