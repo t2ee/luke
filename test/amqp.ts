@@ -3,6 +3,8 @@ import {
     Server,
     Client,
     providers,
+    Serializable,
+    utils,
 } from '../dist';
 
 const {
@@ -17,19 +19,35 @@ import * as chai from 'chai';
 
 const Sleep = ms => new Promise<void>(resolve => setTimeout(resolve, ms));
 
+class Person extends Serializable<Person> {
+    name: string;
+    age: number;
+    fromJson(json: utils.Json): Person {
+        this.name = json['name'] as string;
+        this.age = json['age'] as number;
+        return this;
+    }
+    toJson(): utils.Json {
+        return {
+            name: this.name,
+            age: this.age,
+        };
+    }
+}
+
 @RemoteService('Test')
 class ITestService {
-    @RemoteMethod()
+    @RemoteMethod(String)
     async echo(message: string): Promise<string> { return null;}
 
-    @RemoteMethod()
+    @RemoteMethod(Number)
     async add(a: number, b: number): Promise<number> { return null;}
 
     @RemoteMethod()
     async error() {}
 
-    @RemoteMethod()
-    async broadcast(msg: string) {}
+    @RemoteMethod(Person)
+    async testSerialize(person: Person): Promise<Person> { return null;}
 }
 
 
@@ -43,6 +61,12 @@ class TestService extends ITestService {
     }
     async error() {
         throw 'Error';
+    }
+    async testSerialize(person: Person): Promise<Person> {
+        chai.assert(person.name, 'test');
+        chai.assert.equal(person.age, 0);
+        person.age = 42;
+        return person;
     }
 }
 
@@ -88,4 +112,17 @@ describe('test', () => {
                 done();
             })
     });
+    it('should properly handle Serializable', done => {
+        const person = new Person();
+        person.name = 'test';
+        person.age = 0;
+
+        testClient.testSerialize(person)
+            .then(p => {
+                chai.assert(p.name, 'test');
+                chai.assert.equal(p.age, 42);
+                done();
+            })
+            .catch(done);
+    })
 });

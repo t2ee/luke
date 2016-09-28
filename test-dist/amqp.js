@@ -21,6 +21,19 @@ const { RemoteService, RemoteMethod, } = dist_1.decorators;
 const { AMQPProvider, } = dist_1.providers;
 const chai = require('chai');
 const Sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+class Person extends dist_1.Serializable {
+    fromJson(json) {
+        this.name = json['name'];
+        this.age = json['age'];
+        return this;
+    }
+    toJson() {
+        return {
+            name: this.name,
+            age: this.age,
+        };
+    }
+}
 let ITestService = class ITestService {
     echo(message) {
         return __awaiter(this, void 0, void 0, function* () { return null; });
@@ -31,18 +44,18 @@ let ITestService = class ITestService {
     error() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
-    broadcast(msg) {
-        return __awaiter(this, void 0, void 0, function* () { });
+    testSerialize(person) {
+        return __awaiter(this, void 0, void 0, function* () { return null; });
     }
 };
 __decorate([
-    RemoteMethod(), 
+    RemoteMethod(String), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [String]), 
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "echo", null);
 __decorate([
-    RemoteMethod(), 
+    RemoteMethod(Number), 
     __metadata('design:type', Function), 
     __metadata('design:paramtypes', [Number, Number]), 
     __metadata('design:returntype', Promise)
@@ -54,11 +67,11 @@ __decorate([
     __metadata('design:returntype', Promise)
 ], ITestService.prototype, "error", null);
 __decorate([
-    RemoteMethod(), 
+    RemoteMethod(Person), 
     __metadata('design:type', Function), 
-    __metadata('design:paramtypes', [String]), 
+    __metadata('design:paramtypes', [Person]), 
     __metadata('design:returntype', Promise)
-], ITestService.prototype, "broadcast", null);
+], ITestService.prototype, "testSerialize", null);
 ITestService = __decorate([
     RemoteService('Test'), 
     __metadata('design:paramtypes', [])
@@ -78,6 +91,14 @@ class TestService extends ITestService {
     error() {
         return __awaiter(this, void 0, void 0, function* () {
             throw 'Error';
+        });
+    }
+    testSerialize(person) {
+        return __awaiter(this, void 0, void 0, function* () {
+            chai.assert(person.name, 'test');
+            chai.assert.equal(person.age, 0);
+            person.age = 42;
+            return person;
         });
     }
 }
@@ -119,6 +140,18 @@ describe('test', () => {
             chai.assert.equal(e, 'Error');
             done();
         });
+    });
+    it('should properly handle Serializable', done => {
+        const person = new Person();
+        person.name = 'test';
+        person.age = 0;
+        testClient.testSerialize(person)
+            .then(p => {
+            chai.assert(p.name, 'test');
+            chai.assert.equal(p.age, 42);
+            done();
+        })
+            .catch(done);
     });
 });
 //# sourceMappingURL=amqp.js.map

@@ -91,6 +91,36 @@ const testClient = client.getClient(ITestService);
 ####setConcurrency(concurrency: number): void
 > Set concurrency of running task runners.
 
+
+###abstract Serializable<T>
+> abstract class, data other than number, string, boolean that pass through the interfaces,
+must be children of Serializable.
+
+```
+class Person extends Serializable<Person> {
+    name: string;
+    age: number;
+    fromJson(json: utils.Json): Person {
+        this.name = json['name'] as string;
+        this.age = json['age'] as number;
+        return this;
+    }
+    toJson(): utils.Json {
+        return {
+            name: this.name,
+            age: this.age,
+        };
+    }
+}
+```
+
+####abstract toJson(): utils.Json
+> return Json result
+
+####abstract fromJson(data: utils.Json): T
+> return parsed instance
+
+
 [npm-image]: https://img.shields.io/npm/v/@t2ee/luke.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@t2ee/luke
 [travis-image]: https://img.shields.io/travis/t2ee/luke/master.svg?style=flat-square

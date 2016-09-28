@@ -6,6 +6,7 @@ import Provider from './abstract/Provider';
 import Response from './abstract/Response';
 import Request from './abstract/Request';
 import ThresholdedRunner from './utils/ThresholdedRunner';
+import * as encodeUtil from './utils/encodeUtil';
 
 export default class Server {
     private services: {[key :string] : any} = {};
@@ -69,11 +70,15 @@ export default class Server {
         response.callId = callId;
         if (Service) {
             if (Service.instance[methodName]) {
+                const method = Service.Class.prototype[SERVICE_METHODS][methodName];
                 try {
-                    const result = await Service.instance[methodName](...params);
-                    response.response = result;
+                    const args = params.map((p, i) =>
+                        encodeUtil.decode(p, method.paramTypes[i]));
+                    const result = await Service.instance[methodName](...args);
+                    response.response = encodeUtil.encode(result, method.returnType);
                     response.responseType = 'success';
                 } catch (e) {
+                    console.log(e)
                     response.response = e.message || e;
                     response.callId = callId;
                     response.responseType = 'error';

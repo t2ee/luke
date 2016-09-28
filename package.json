@@ -1,11 +1,11 @@
 {
   "name": "@t2ee/luke",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.json",
     "test-typescript": "rm -rf test-dist && tsc -p tsconfig.test.json",
     "test": "npm run build && npm run test-typescript && npm run mocha",
     "mocha": "mocha test-dist/*.js --require source-map-support/register",

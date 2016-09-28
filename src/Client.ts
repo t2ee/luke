@@ -9,6 +9,8 @@ import * as Q from 'q';
 import generateUUID from './utils/generateUUID';
 import ThresholdedRunner from './utils/ThresholdedRunner';
 import PromisedQueue from './utils/PromisedQueue';
+import Serializable from './Serializable';
+import * as encodeUtil from './utils/encodeUtil';
 
 import {
     Json,
@@ -16,9 +18,15 @@ import {
 } from './utils';
 
 export default class RemoteClient {
-    private queue: { [key: string]: Q.Deferred<any> } = {};
+    private queue: { [key: string]: {
+        d: Q.Deferred<any>
+        service: string,
+        method: string,
+    }} = {};
     private provider: Provider;
     private broadcastHandler: (payload) => any;
+    private prototypes: { [key: string]: any } = {};
+
     constructor(provider: Provider) {
         this.provider = provider;
         (new ThresholdedRunner(
@@ -33,6 +41,7 @@ export default class RemoteClient {
     getClient<T>(Service: new () => T): T {
         const prototype = Service.prototype;
         const name = prototype[SERVICE_NAME];
+        this.prototypes[name] = prototype[SERVICE_METHODS];
 
         const result = new Service();
         const methods = Object.keys(prototype[SERVICE_METHODS])
@@ -42,11 +51,15 @@ export default class RemoteClient {
                 const request = new Request();
                 request.serviceName = name;
                 request.methodName = key;
-                request.params = params;
+                request.params = params.map((p, i) => encodeUtil.encode(p, method.paramTypes[i]));
                 request.callId = generateUUID();
                 const d = Q.defer<any>();
                 await this.provider.sendRequest(request);
-                this.queue[request.callId] = d;
+                this.queue[request.callId] = {
+                    d,
+                    method: key,
+                    service: name,
+                };
                 return d.promise;
             }
         }
@@ -57,12 +70,13 @@ export default class RemoteClient {
         const response: Response = await this.provider.getResponse();
         const callId = response.callId
         if (this.queue[callId]) {
-            const d = this.queue[callId];
+            const r = this.queue[callId];
             const type = response.responseType;
             if (type === 'success') {
-                d.resolve(response.response);
+                const returnType = this.prototypes[r.service][r.method].returnType;
+                r.d.resolve(encodeUtil.decode(response.response, returnType));
             } else if (type === 'error'){
-                d.reject(response.response);
+                r.d.reject(response.response);
             }
         }
     }

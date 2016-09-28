@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const symbols_1 = require('./symbols');
 const Response_1 = require('./abstract/Response');
 const ThresholdedRunner_1 = require('./utils/ThresholdedRunner');
+const encodeUtil = require('./utils/encodeUtil');
 class Server {
     constructor(provider) {
         this.services = {};
@@ -48,12 +49,15 @@ class Server {
             response.callId = callId;
             if (Service) {
                 if (Service.instance[methodName]) {
+                    const method = Service.Class.prototype[symbols_1.SERVICE_METHODS][methodName];
                     try {
-                        const result = yield Service.instance[methodName](...params);
-                        response.response = result;
+                        const args = params.map((p, i) => encodeUtil.decode(p, method.paramTypes[i]));
+                        const result = yield Service.instance[methodName](...args);
+                        response.response = encodeUtil.encode(result, method.returnType);
                         response.responseType = 'success';
                     }
                     catch (e) {
+                        console.log(e);
                         response.response = e.message || e;
                         response.callId = callId;
                         response.responseType = 'error';
