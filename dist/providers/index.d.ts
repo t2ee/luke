@@ -1,3 +1,4 @@
 import AMQPProvider from './AMQPProvider';
 import RedisProvider from './RedisProvider';
-export { AMQPProvider, RedisProvider };
+import SocketIOProvider from './SocketIOProvider';
+export { AMQPProvider, RedisProvider, SocketIOProvider };

@@ -64,6 +64,7 @@ const testClient = client.getClient(ITestService);
 ##Providers
 ###AMQPProvider(uri: string, topic: string)
 ###RedisProvider(uri: string, topic: string, retryTimeout: number)
+###SocketIOProvider(socketOrPort: number | string)
 
 ##API
 
@@ -130,7 +131,6 @@ class Person extends Serializable<Person> {
 
 ##Plans
 
- - [ ] SocketIOProvider
  - [ ] TcpProvider
  - [ ] UdpProvider
 

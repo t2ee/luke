@@ -44,10 +44,9 @@ class RedisProvider extends _1.Provider {
         });
     }
     fetchPendingList() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                const now = Date.now();
-                this.client.eval(`
+        return new Promise((resolve, reject) => {
+            const now = Date.now();
+            this.client.eval(`
                     local ids = redis.call(
                             "sort",
                             "pendingList:${this.queue}",
@@ -73,12 +72,11 @@ class RedisProvider extends _1.Provider {
                     end
                     return nil;
                 `, 0, (err, res) => {
-                    if (err)
-                        return reject(err);
-                    if (!res)
-                        return resolve(null);
-                    resolve(res);
-                });
+                if (err)
+                    return reject(err);
+                if (!res)
+                    return resolve(null);
+                resolve(res);
             });
         });
     }

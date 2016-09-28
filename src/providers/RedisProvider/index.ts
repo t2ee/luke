@@ -7,8 +7,6 @@ import * as Redis from 'redis';
 import generateUUID from '../../utils/generateUUID';
 import PromisedQueue from '../../utils/PromisedQueue';
 import Json from '../../utils/Json';
-import * as Q from 'q';
-
 
 export default class RedisProvider extends Provider {
     private queue: string;
@@ -48,7 +46,7 @@ export default class RedisProvider extends Provider {
         })
     }
 
-    async fetchPendingList(): Promise<Array<string>> {
+    fetchPendingList(): Promise<Array<string>> {
         return new Promise<Array<string>>((resolve, reject) => {
             const now = Date.now();
             this.client.eval(`
@@ -82,7 +80,7 @@ export default class RedisProvider extends Provider {
                     resolve(res);
                 });
         });
-}
+    }
 
     async getRequest(): Promise<Request> {
         let res = await this.fetchPendingList();
